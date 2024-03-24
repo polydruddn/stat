@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Logger</title>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            var logData = {
+                timestamp: new Date().toISOString(),
+                page: window.location.href
+            };
+
+            var dataString = JSON.stringify(logData) + '\n';
+
+            // Create a new Blob object with log data
+            var blob = new Blob([dataString], { type: 'text/plain' });
+
+            // Create a new FileWriter
+            var fileWriter = new FileWriter('log.txt');
+
+            // Write the log data to the log file
+            fileWriter.write(blob);
+        };
+
+        // FileWriter class to handle writing data to a file
+        function FileWriter(filename) {
+            this.filename = filename;
+        }
+
+        // Method to write data to the file
+        FileWriter.prototype.write = function(blob) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var data = event.target.result;
+                var a = document.createElement('a');
+                a.href = data;
+                a.download = this.filename || 'file.txt';
+                a.click();
+            };
+            reader.readAsDataURL(blob);
+        };
+    </script>
+</body>
+</html>
